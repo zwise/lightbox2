@@ -13,16 +13,18 @@
   display: none
 
 #lightbox
-  position: absolute
-  left: 0
-  width: 100%
+  position: fixed
+  left: 50%
+  top: 50%
   z-index: 10000
   text-align: center
   line-height: 0
   font-family: 'lucida grande', tahoma, verdana, arial, sans-serif
   font-weight: normal
   img
+    max-width: 100%
     width: auto
+    max-height: 100%
     height: auto
   a img
     border: none
@@ -33,7 +35,6 @@
   +pie-clearfix
   width: 250px
   height: 250px
-  margin: 0 auto
   +border-radius($radius)
 
 .lb-container
@@ -86,7 +87,6 @@
     background: url(../images/next.png) right 48% no-repeat
 
 .lb-dataContainer
-  margin: 0 auto
   padding-top: 5px
   +pie-clearfix
   width: 100%

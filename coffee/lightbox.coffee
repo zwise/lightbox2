@@ -50,7 +50,8 @@ class LightboxOptions
     @resizeDuration = 700
     @fadeDuration = 500
     @labelImage = "Image" # Change to localize to non-english language
-    @labelOf = "of"       
+    @labelOf = "of"
+    @resizeScale = .85    
 
 
 class Lightbox
@@ -166,13 +167,8 @@ class Lightbox
 
     # Position lightbox 
     $window = $(window)
-    top = $window.scrollTop() + $window.height()/10
-    left = $window.scrollLeft()
     $lightbox = $('#lightbox')
     $lightbox
-      .css
-        top: top + 'px'
-        left: left + 'px'
       .fadeIn( @options.fadeDuration)
       
     @changeImage(imageNumber)
@@ -220,15 +216,35 @@ class Lightbox
   sizeContainer: (imageWidth, imageHeight) ->
     $lightbox = $('#lightbox')
 
+    windowHeight = $(window).height()
+    windowWidth = $(window).width()
+
+    if (imageWidth > windowWidth)
+      console.log('wider')
+      imageHeight = ((windowWidth*@options.resizeScale)/imageWidth)*imageHeight
+      imageWidth = windowWidth*@options.resizeScale
+    if (imageHeight > windowHeight)
+      console.log('taller')
+      imageWidth = ((windowHeight*@options.resizeScale)/imageHeight)*imageWidth
+      imageHeight = windowHeight*@options.resizeScale
+
     $outerContainer = $lightbox.find('.lb-outerContainer')
     oldWidth = $outerContainer.outerWidth()
     oldHeight = $outerContainer.outerHeight()
+
+    $dataContainer = $lightbox.find('.lb-dataContainer')
+    dataContainerHeight = $dataContainer.outerHeight()
 
     $container = $lightbox.find('.lb-container')
     containerTopPadding = parseInt $container.css('padding-top'), 10
     containerRightPadding = parseInt $container.css('padding-right'), 10
     containerBottomPadding = parseInt $container.css('padding-bottom'), 10
-    containerLeftPadding = parseInt $container.css('padding-left'), 10        
+    containerLeftPadding = parseInt $container.css('padding-left'), 10
+
+    $lightbox
+      .css
+        'margin-top': -((imageHeight+containerTopPadding+containerBottomPadding+dataContainerHeight)/2) + 'px'
+        'margin-left': -((imageWidth+containerLeftPadding+containerRightPadding)/2) + 'px'
 
     newWidth = imageWidth + containerLeftPadding + containerRightPadding
     newHeight = imageHeight + containerTopPadding + containerBottomPadding
